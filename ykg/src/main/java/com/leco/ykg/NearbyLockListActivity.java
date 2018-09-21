@@ -19,6 +19,7 @@ public class NearbyLockListActivity extends AppCompatActivity {
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //
                 finish();
             }
         });
