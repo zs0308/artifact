@@ -1,0 +1,54 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+
+
+
+    defaultConfig {
+        minSdkVersion 18
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            manifestPlaceholders = [ AMAP_KEY:"ee20324fba1c7f4ad7a4a207e33d8e8d" ]
+        }
+    }
+
+}
+task clearJar(type: Delete) {
+    //libs/后面是你自己jar包的名字，随便命名
+    delete 'libs/ykg1001.jar'
+}
+
+//打包任务
+task makeJar(type:org.gradle.api.tasks.bundling.Jar) {
+    //指定生成的jar名
+    baseName 'ykg1001'
+    //从哪里打包class文件
+    from('build/intermediates/classes/release/com/leco/ykg')
+    //打包到jar后的目录结构
+    into('com/leco/ykg/')
+    //去掉不需要打包的目录和文件
+    exclude('BuildConfig.class', 'R.class')
+    //去掉R$开头的文件
+    exclude{ it.name.startsWith('R$');}
+}
+
+makeJar.dependsOn(clearJar, build)
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
